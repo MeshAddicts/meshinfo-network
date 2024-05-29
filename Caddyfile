@@ -1,0 +1,13 @@
+{
+	debug
+}
+
+*.meshinfo.network {
+	root * /srv
+	encode gzip
+	file_server
+	tls kevin@airframes.io
+	log {
+		output file /var/log/caddy.log
+	}
+}
