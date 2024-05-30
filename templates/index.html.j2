@@ -1,0 +1,44 @@
+{% extends "layout.html.j2" %}
+
+{% block title %}Welcome!{% endblock %}
+
+{% block content %}
+    <h1>Welcome to MeshInfo Network!</h1>
+    <p>
+      A hub for MeshInfo. Discover Meshtastic mesh networks that are using
+      <a href="https://github.com/kevinelliott/meshinfo">MeshInfo</a> to announce their presence.
+    </p>
+
+    <h2>Known Meshes</h2>
+    <table border=1 cellpadding=4>
+      <thead>
+        <tr>
+          <td>Name</td>
+          <td>Short Name</td>
+          <td>Country</td>
+          <td>Region</td>
+          <td>Metro</td>
+          <td>Website</td>
+          <td>Description</td>
+          <td>Last Announcement</td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for mesh in meshes %}
+          <tr>
+            <td>
+              <a href="{{ mesh.meshinfo_url }}" target="_blank">{{ mesh.name }}</a>
+            </td>
+            <td>{{ mesh.short_name }}</td>
+            <td>{{ mesh.country }}</td>
+            <td>{{ mesh.region }}</td>
+            <td>{{ mesh.metro }}</td>
+            <td>
+              <a href="{{ mesh.url }}" target="_blank">{{ mesh.url }}</a>
+            </td>
+            <td>{{ mesh.description }}</td>
+            <td>{{ mesh.last_announcement.strftime('%Y-%m-%d %H:%M:%S %z') }}</td>
+          </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
