@@ -1,0 +1,99 @@
+{
+  "kind": "collectionType",
+  "collectionName": "mesh_instances",
+  "info": {
+    "singularName": "mesh-instance",
+    "pluralName": "mesh-instances",
+    "displayName": "Mesh Instance",
+    "description": "A registered MeshInfo instance"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "displayName": {
+      "type": "string",
+      "required": true
+    },
+    "canonicalUrl": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "originalUrl": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "displayName"
+    },
+    "description": {
+      "type": "text"
+    },
+    "country": {
+      "type": "string",
+      "maxLength": 2
+    },
+    "region": {
+      "type": "string"
+    },
+    "metro": {
+      "type": "string"
+    },
+    "contactUrl": {
+      "type": "string"
+    },
+    "contactEmail": {
+      "type": "email"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["pending", "approved", "rejected", "hidden"],
+      "default": "pending",
+      "required": true
+    },
+    "visibility": {
+      "type": "enumeration",
+      "enum": ["public", "unlisted"],
+      "default": "public",
+      "required": true
+    },
+    "reportingMode": {
+      "type": "enumeration",
+      "enum": ["none", "heartbeat", "stats"],
+      "default": "none",
+      "required": true
+    },
+    "authTokenHash": {
+      "type": "string",
+      "private": true
+    },
+    "lastSeenAt": {
+      "type": "datetime"
+    },
+    "softwareVersion": {
+      "type": "string"
+    },
+    "approvedAt": {
+      "type": "datetime"
+    },
+    "internalNotes": {
+      "type": "text",
+      "private": true
+    },
+    "statsSnapshots": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::stats-snapshot.stats-snapshot",
+      "mappedBy": "meshInstance"
+    },
+    "heartbeatEvents": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::heartbeat-event.heartbeat-event",
+      "mappedBy": "meshInstance"
+    }
+  }
+}

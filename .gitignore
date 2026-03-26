@@ -162,3 +162,26 @@ cython_debug/
 #.idea/
 
 data/*
+
+# Node.js
+node_modules/
+npm-debug.log*
+
+# Strapi
+strapi/.tmp/
+strapi/build/
+strapi/dist/
+strapi/exports/
+strapi/.cache/
+
+# Astro
+frontend/dist/
+frontend/.astro/
+
+# Environment files
+.env
+*.env.local
+
+# OS
+.DS_Store
+Thumbs.db

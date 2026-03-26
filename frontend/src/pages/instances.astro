@@ -1,0 +1,67 @@
+---
+// Server-rendered so the list is always fresh.
+export const prerender = false;
+
+import Layout from '../layouts/Layout.astro';
+import InstanceCard from '../components/InstanceCard.astro';
+import { getInstances } from '../lib/strapi';
+
+let instances = [];
+let error: string | null = null;
+
+try {
+  instances = await getInstances();
+} catch (err) {
+  console.error('Failed to fetch instances from Strapi:', err);
+  error = 'Could not load instances. Please try again later.';
+}
+---
+
+<Layout
+  title="Instances"
+  description="Browse approved MeshInfo instances — public Meshtastic mesh network dashboards."
+>
+  <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-white">MeshInfo Instances</h1>
+      <p class="mt-2 text-gray-400">
+        {instances.length > 0
+          ? `${instances.length} approved public instance${instances.length === 1 ? '' : 's'}`
+          : 'Public MeshInfo deployments from around the world'}
+      </p>
+    </div>
+
+    {error && (
+      <div class="rounded-lg border border-red-800 bg-red-950/40 px-4 py-3 text-sm text-red-300">
+        {error}
+      </div>
+    )}
+
+    {!error && instances.length === 0 && (
+      <div class="card text-center py-16">
+        <div class="text-4xl mb-4">📡</div>
+        <h2 class="text-lg font-semibold text-gray-300">No instances yet</h2>
+        <p class="mt-2 text-sm text-gray-500">
+          Be the first to register your MeshInfo instance.
+        </p>
+        <a
+          href="https://github.com/MeshAddicts/meshinfo-network#registration"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-outline mt-6 inline-flex"
+        >
+          Learn how to register
+        </a>
+      </div>
+    )}
+
+    {instances.length > 0 && (
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {instances.map((instance) => (
+          <InstanceCard instance={instance} />
+        ))}
+      </div>
+    )}
+  </div>
+</Layout>
