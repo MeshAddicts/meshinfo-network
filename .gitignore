@@ -162,3 +162,19 @@ cython_debug/
 #.idea/
 
 data/*
+
+# SQLite databases
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Frontend build output and dependencies
+frontend/dist/
+frontend/node_modules/
+
+# Backend environment
+backend/.env
+
+# Token file (sensitive)
+data/reporting_token.txt
