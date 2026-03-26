@@ -1,0 +1,87 @@
+version: '3.8'
+
+# ────────────────────────────────────────────────────────────────────────────
+# MeshInfo Network — Docker Compose
+#
+# Network model:
+#   - `internal` network: Strapi + Frontend + Nginx (backend communication)
+#   - `public`   network: Nginx only (public internet ingress)
+#
+# Public exposure:
+#   - Port 80  → nginx → Astro frontend (public site)
+#   - Port 1337 → nginx → Strapi admin panel (moderation UI)
+#
+# Strapi content/API routes (/api/*) are NOT reachable from the public internet.
+# Astro fetches from Strapi server-side over the internal Docker network.
+# ────────────────────────────────────────────────────────────────────────────
+
+networks:
+  internal:
+    driver: bridge
+    internal: true
+  public:
+    driver: bridge
+
+volumes:
+  strapi-data:
+
+services:
+
+  # ── Strapi CMS / Backend ────────────────────────────────────────────────
+  strapi:
+    build:
+      context: ./strapi
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      HOST: 0.0.0.0
+      PORT: 1337
+      NODE_ENV: production
+      APP_KEYS: ${APP_KEYS}
+      API_TOKEN_SALT: ${API_TOKEN_SALT}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      TRANSFER_TOKEN_SALT: ${TRANSFER_TOKEN_SALT}
+      JWT_SECRET: ${JWT_SECRET}
+      DATABASE_CLIENT: sqlite
+      DATABASE_FILENAME: /app/.tmp/data.db
+    volumes:
+      - strapi-data:/app/.tmp
+    # Strapi is NOT connected to `public` — only the internal network.
+    # Nginx bridges to it via the `internal` network.
+    networks:
+      - internal
+    # No `ports:` — no direct public access.
+
+  # ── Astro Frontend ──────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      # Server-side Strapi URL — internal Docker network only.
+      STRAPI_URL: http://strapi:1337
+      STRAPI_TOKEN: ${STRAPI_TOKEN}
+      HOST: 0.0.0.0
+      PORT: 4321
+    depends_on:
+      - strapi
+    networks:
+      - internal
+    # No `ports:` — traffic comes through nginx.
+
+  # ── Nginx Reverse Proxy ─────────────────────────────────────────────────
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"       # Public site (Astro)
+      - "1337:1337"   # Strapi admin panel
+    depends_on:
+      - frontend
+      - strapi
+    networks:
+      - internal
+      - public

@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply bg-surface text-gray-100;
+  }
+
+  a {
+    @apply text-brand-400 hover:text-brand-300 transition-colors;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-surface-card border border-surface-border rounded-xl p-6;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 text-xs font-medium px-2 py-0.5 rounded-full;
+  }
+
+  .badge-indigo {
+    @apply badge bg-brand-950 text-brand-300 border border-brand-800;
+  }
+
+  .badge-green {
+    @apply badge bg-emerald-950 text-emerald-400 border border-emerald-800;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg
+           bg-brand-600 hover:bg-brand-500 text-white font-medium
+           transition-colors focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2 focus:ring-offset-surface;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg
+           border border-surface-border hover:border-brand-500 text-gray-300 hover:text-brand-300 font-medium
+           transition-colors;
+  }
+}

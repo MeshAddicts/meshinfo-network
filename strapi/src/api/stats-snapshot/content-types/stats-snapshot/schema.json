@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "stats_snapshots",
+  "info": {
+    "singularName": "stats-snapshot",
+    "pluralName": "stats-snapshots",
+    "displayName": "Stats Snapshot",
+    "description": "Coarse stats snapshot from a MeshInfo instance"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "meshInstance": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::mesh-instance.mesh-instance",
+      "inversedBy": "statsSnapshots"
+    },
+    "nodeCount": {
+      "type": "integer"
+    },
+    "boundsNorth": {
+      "type": "float"
+    },
+    "boundsSouth": {
+      "type": "float"
+    },
+    "boundsEast": {
+      "type": "float"
+    },
+    "boundsWest": {
+      "type": "float"
+    },
+    "softwareVersion": {
+      "type": "string"
+    },
+    "lastDataRefreshAt": {
+      "type": "datetime"
+    },
+    "payloadReceivedAt": {
+      "type": "datetime",
+      "required": true
+    }
+  }
+}

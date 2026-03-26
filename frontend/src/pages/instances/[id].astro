@@ -1,0 +1,115 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import { getInstance } from '../../lib/strapi';
+
+const { id } = Astro.params;
+
+const instance = id ? await getInstance(id) : null;
+
+if (!instance) {
+  return Astro.redirect('/instances', 307);
+}
+
+const location = [instance.metro, instance.region, instance.country].filter(Boolean).join(', ');
+
+function formatDate(ts: string | null): string {
+  if (!ts) return 'Never';
+  return new Date(ts).toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZoneName: 'short',
+  });
+}
+---
+
+<Layout
+  title={instance.displayName}
+  description={instance.description ?? `MeshInfo instance at ${instance.canonicalUrl}`}
+>
+  <div class="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
+    <!-- Breadcrumb -->
+    <nav class="mb-8 flex items-center gap-2 text-sm text-gray-500">
+      <a href="/instances" class="hover:text-gray-300 transition-colors no-underline">Instances</a>
+      <span>›</span>
+      <span class="text-gray-300">{instance.displayName}</span>
+    </nav>
+
+    <!-- Header -->
+    <div class="card mb-6">
+      <div class="flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 class="text-2xl font-bold text-white">{instance.displayName}</h1>
+          <a
+            href={`https://${instance.canonicalUrl}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-1 block text-sm font-mono text-brand-400 no-underline hover:text-brand-300"
+          >
+            {instance.canonicalUrl} ↗
+          </a>
+        </div>
+        {instance.softwareVersion && (
+          <span class="badge-indigo text-sm">v{instance.softwareVersion}</span>
+        )}
+      </div>
+
+      {instance.description && (
+        <p class="mt-4 text-gray-400 leading-7">{instance.description}</p>
+      )}
+    </div>
+
+    <!-- Details -->
+    <div class="card">
+      <h2 class="text-sm font-semibold uppercase tracking-wide text-gray-500 mb-4">Details</h2>
+      <dl class="grid grid-cols-1 gap-y-4 sm:grid-cols-2">
+        {location && (
+          <>
+            <dt class="text-xs text-gray-500">Location</dt>
+            <dd class="text-sm text-gray-200">{location}</dd>
+          </>
+        )}
+
+        <dt class="text-xs text-gray-500">Last seen</dt>
+        <dd class="text-sm text-gray-200">{formatDate(instance.lastSeenAt)}</dd>
+
+        {instance.softwareVersion && (
+          <>
+            <dt class="text-xs text-gray-500">Software version</dt>
+            <dd class="text-sm text-gray-200 font-mono">{instance.softwareVersion}</dd>
+          </>
+        )}
+
+        <dt class="text-xs text-gray-500">Listed since</dt>
+        <dd class="text-sm text-gray-200">{formatDate(instance.createdAt)}</dd>
+
+        {instance.contactUrl && (
+          <>
+            <dt class="text-xs text-gray-500">Contact</dt>
+            <dd class="text-sm">
+              <a
+                href={instance.contactUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-mono text-brand-400 text-xs no-underline hover:text-brand-300"
+              >
+                {instance.contactUrl}
+              </a>
+            </dd>
+          </>
+        )}
+      </dl>
+    </div>
+
+    <!-- Back link -->
+    <div class="mt-8">
+      <a href="/instances" class="btn-outline text-sm">
+        ← Back to instances
+      </a>
+    </div>
+  </div>
+</Layout>

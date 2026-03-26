@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "heartbeat_events",
+  "info": {
+    "singularName": "heartbeat-event",
+    "pluralName": "heartbeat-events",
+    "displayName": "Heartbeat Event",
+    "description": "Heartbeat or lifecycle event from a MeshInfo instance"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "meshInstance": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::mesh-instance.mesh-instance",
+      "inversedBy": "heartbeatEvents"
+    },
+    "eventType": {
+      "type": "enumeration",
+      "enum": ["startup", "heartbeat", "stats"],
+      "required": true
+    },
+    "metadata": {
+      "type": "json"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "meshinfo-network-strapi",
+  "private": true,
+  "version": "0.1.0",
+  "description": "MeshInfo Network - Strapi Backend",
+  "scripts": {
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "strapi": "strapi",
+    "test": "jest"
+  },
+  "engines": {
+    "node": ">=18.0.0 <=22.x.x",
+    "npm": ">=6.0.0"
+  },
+  "dependencies": {
+    "@strapi/plugin-users-permissions": "^5.13.1",
+    "@strapi/strapi": "^5.13.1",
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^9.4.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
