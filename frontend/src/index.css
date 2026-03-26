@@ -1,0 +1,53 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Tailwind v4 uses oklch colors which shift the indigo palette more blue.
+  Override with v3 hex values to preserve the original softer indigo look.
+*/
+@theme {
+  --color-indigo-300: #a5b4fc;
+  --color-indigo-400: #818cf8;
+  --color-indigo-500: #6366f1;
+  --color-indigo-600: #4f46e5;
+  --color-indigo-700: #4338ca;
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+body {
+  font-family: monospace;
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #4f46e5;
+}
+
+a:visited {
+  color: #4f46e5;
+}
+
+.dark a {
+  color: #818cf8;
+}
+
+.dark a:visited {
+  color: #818cf8;
+}
+
+.dark a:hover {
+  color: #6366f1;
+}

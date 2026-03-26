@@ -1,13 +1,13 @@
-{
-	debug
-}
+:80 {
+    # Serve frontend static files
+    handle /* {
+        root * /srv/frontend
+        try_files {path} /index.html
+        file_server
+    }
 
-*.meshinfo.network {
-	root * /srv
-	encode gzip
-	file_server
-	tls kevin@airframes.io
-	log {
-		output file /var/log/caddy.log
-	}
+    # Proxy API requests to backend
+    handle /api/* {
+        reverse_proxy backend:8000
+    }
 }
